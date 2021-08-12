@@ -11,6 +11,7 @@ grammar IsiLang;
 	import br.com.professorisidro.isilanguage.ast.CommandEscrita;
 	import br.com.professorisidro.isilanguage.ast.CommandAtribuicao;
 	import br.com.professorisidro.isilanguage.ast.CommandDecisao;
+	import br.com.professorisidro.isilanguage.ast.CommandEnquanto;
 	import java.util.ArrayList;
 	import java.util.Stack;
 }
@@ -31,6 +32,7 @@ grammar IsiLang;
 	private String _exprDecision;
 	private ArrayList<AbstractCommand> listaTrue;
 	private ArrayList<AbstractCommand> listaFalse;
+	private ArrayList<AbstractCommand> listaWhile;
 	
 	public void verificaID(String id){
 		if (!symbolTable.exists(id)){
@@ -49,7 +51,7 @@ grammar IsiLang;
 	}
 }
 
-prog	: 'programa' decl bloco  'fimprog;'
+prog	: 'programa' decl bloco  'fimprog.'
            {  program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
            	 
@@ -84,7 +86,7 @@ declaravar :  tipo ID  {
 	                  }
                     }
               )* 
-               SC
+               P
            ;
            
 tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
@@ -101,7 +103,8 @@ bloco	: { curThread = new ArrayList<AbstractCommand>();
 cmd		:  cmdleitura  
  		|  cmdescrita 
  		|  cmdattrib
- 		|  cmdselecao  
+ 		|  cmdselecao
+ 		|  cmdenquanto 
 		;
 		
 cmdleitura	: 'leia' AP
@@ -109,7 +112,7 @@ cmdleitura	: 'leia' AP
                      	  _readID = _input.LT(-1).getText();
                         } 
                      FP 
-                     SC 
+                     P 
                      
               {
               	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
@@ -124,7 +127,7 @@ cmdescrita	: 'escreva'
 	                  _writeID = _input.LT(-1).getText();
                      } 
                  FP 
-                 SC
+                 P
                {
                	  CommandEscrita cmd = new CommandEscrita(_writeID);
                	  stack.peek().add(cmd);
@@ -136,7 +139,7 @@ cmdattrib	:  ID { verificaID(_input.LT(-1).getText());
                    } 
                ATTR { _exprContent = ""; } 
                expr 
-               SC
+               P
                {
                	 CommandAtribuicao cmd = new CommandAtribuicao(_exprID, _exprContent);
                	 stack.peek().add(cmd);
@@ -174,6 +177,25 @@ cmdselecao  :  'se' AP
                    	}
                    )?
             ;
+            
+cmdenquanto  : 'enquanto' AP
+                          ID    { _exprDecision = _input.LT(-1).getText(); }
+                    	  OPREL { _exprDecision += _input.LT(-1).getText(); }
+                          (ID | NUMBER) {_exprDecision += _input.LT(-1).getText(); }  
+						  FP 
+						  ACH 
+		                  { 
+		                     curThread = new ArrayList<AbstractCommand>(); 
+		                     stack.push(curThread);
+		                  }							
+						  (cmd)+
+						  FCH 
+						  {
+							   listaWhile = stack.pop();
+							    CommandEnquanto cmd = new CommandEnquanto(_exprDecision, listaWhile);
+							    stack.peek().add(cmd);
+						  }
+			;
 			
 expr		:  termo ( 
 	             OP  { _exprContent += _input.LT(-1).getText();}
@@ -204,7 +226,7 @@ SC	: ';'
 OP	: '+' | '-' | '*' | '/'
 	;
 	
-ATTR : '='
+ATTR : ':='
 	 ;
 	 
 VIR  : ','
@@ -226,4 +248,12 @@ ID	: [a-z] ([a-z] | [A-Z] | [0-9])*
 NUMBER	: [0-9]+ ('.' [0-9]+)?
 		;
 		
-WS	: (' ' | '\t' | '\n' | '\r') -> skip;
+WS	: (' ' | '\t' | '\n' | '\r') -> skip
+    ;
+
+AD  :  '"'
+    ;
+    
+P  :  '.'
+   ;
+      
