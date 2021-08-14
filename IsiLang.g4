@@ -288,6 +288,9 @@ TEXT  :  AD (.)*? AD
 WS	: (' ' | '\t' | '\n' | '\r') -> skip
     ;
 
+COMMENT  :  ('/*' .*? '*/') -> skip 
+         ;
+
 AD  :  '"'
     ;
     

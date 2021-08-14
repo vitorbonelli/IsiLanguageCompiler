@@ -34,7 +34,7 @@ public class IsiLangParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, AP=11, FP=12, SC=13, OP=14, ATTR=15, VIR=16, ACH=17, FCH=18, 
-		OPREL=19, ID=20, NUMBER=21, TEXT=22, WS=23, AD=24, P=25;
+		OPREL=19, ID=20, NUMBER=21, TEXT=22, WS=23, COMMENT=24, AD=25, P=26;
 	public static final int
 		RULE_prog = 0, RULE_decl = 1, RULE_declaravar = 2, RULE_tipo = 3, RULE_bloco = 4, 
 		RULE_cmd = 5, RULE_cmdleitura = 6, RULE_cmdescrita = 7, RULE_cmdattrib = 8, 
@@ -47,12 +47,13 @@ public class IsiLangParser extends Parser {
 	private static final String[] _LITERAL_NAMES = {
 		null, "'programa'", "'fimprog.'", "'numero'", "'texto'", "'leia'", "'escreva'", 
 		"'se'", "'entao'", "'senao'", "'enquanto'", "'('", "')'", "';'", null, 
-		"':='", "','", "'{'", "'}'", null, null, null, null, null, "'\"'", "'.'"
+		"':='", "','", "'{'", "'}'", null, null, null, null, null, null, "'\"'", 
+		"'.'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, "AP", 
 		"FP", "SC", "OP", "ATTR", "VIR", "ACH", "FCH", "OPREL", "ID", "NUMBER", 
-		"TEXT", "WS", "AD", "P"
+		"TEXT", "WS", "COMMENT", "AD", "P"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -1126,7 +1127,7 @@ public class IsiLangParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\33\u00a8\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\u00a8\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\3\2\3\2\3\2\3\2\3\2\3\2\3\3\6\3$\n\3\r"+
 		"\3\16\3%\3\4\3\4\3\4\3\4\3\4\3\4\7\4.\n\4\f\4\16\4\61\13\4\3\4\3\4\3\5"+
@@ -1145,15 +1146,15 @@ public class IsiLangParser extends Parser {
 		"!\b\2\1\2!\3\3\2\2\2\"$\5\6\4\2#\"\3\2\2\2$%\3\2\2\2%#\3\2\2\2%&\3\2\2"+
 		"\2&\5\3\2\2\2\'(\5\b\5\2()\7\26\2\2)/\b\4\1\2*+\7\22\2\2+,\7\26\2\2,."+
 		"\b\4\1\2-*\3\2\2\2.\61\3\2\2\2/-\3\2\2\2/\60\3\2\2\2\60\62\3\2\2\2\61"+
-		"/\3\2\2\2\62\63\7\33\2\2\63\7\3\2\2\2\64\65\7\5\2\2\659\b\5\1\2\66\67"+
+		"/\3\2\2\2\62\63\7\34\2\2\63\7\3\2\2\2\64\65\7\5\2\2\659\b\5\1\2\66\67"+
 		"\7\6\2\2\679\b\5\1\28\64\3\2\2\28\66\3\2\2\29\t\3\2\2\2:<\b\6\1\2;=\5"+
 		"\f\7\2<;\3\2\2\2=>\3\2\2\2><\3\2\2\2>?\3\2\2\2?\13\3\2\2\2@F\5\16\b\2"+
 		"AF\5\20\t\2BF\5\22\n\2CF\5\24\13\2DF\5\26\f\2E@\3\2\2\2EA\3\2\2\2EB\3"+
 		"\2\2\2EC\3\2\2\2ED\3\2\2\2F\r\3\2\2\2GH\7\7\2\2HI\7\r\2\2IJ\7\26\2\2J"+
-		"K\b\b\1\2KL\7\16\2\2LM\7\33\2\2MN\b\b\1\2N\17\3\2\2\2OP\7\b\2\2PT\7\r"+
+		"K\b\b\1\2KL\7\16\2\2LM\7\34\2\2MN\b\b\1\2N\17\3\2\2\2OP\7\b\2\2PT\7\r"+
 		"\2\2QR\7\26\2\2RU\b\t\1\2SU\7\30\2\2TQ\3\2\2\2TS\3\2\2\2UV\3\2\2\2VW\b"+
-		"\t\1\2WX\7\16\2\2XY\7\33\2\2YZ\b\t\1\2Z\21\3\2\2\2[\\\7\26\2\2\\]\b\n"+
-		"\1\2]^\7\21\2\2^_\b\n\1\2_`\5\30\r\2`a\7\33\2\2ab\b\n\1\2b\23\3\2\2\2"+
+		"\t\1\2WX\7\16\2\2XY\7\34\2\2YZ\b\t\1\2Z\21\3\2\2\2[\\\7\26\2\2\\]\b\n"+
+		"\1\2]^\7\21\2\2^_\b\n\1\2_`\5\30\r\2`a\7\34\2\2ab\b\n\1\2b\23\3\2\2\2"+
 		"cd\7\t\2\2de\7\r\2\2ef\7\26\2\2fg\b\13\1\2gh\7\25\2\2hi\b\13\1\2ij\t\2"+
 		"\2\2jk\b\13\1\2kl\7\16\2\2lm\7\n\2\2mn\7\23\2\2np\b\13\1\2oq\5\f\7\2p"+
 		"o\3\2\2\2qr\3\2\2\2rp\3\2\2\2rs\3\2\2\2st\3\2\2\2tu\7\24\2\2u\u0081\b"+
