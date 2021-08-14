@@ -63,7 +63,12 @@ grammar IsiLang;
 		}	
 	}
 	
-	
+	public void compareType(String id, int type){
+		IsiVariable var = (IsiVariable) symbolTable.get(id);
+		if (var.getType() != type) {
+	       	throw new IsiSemanticException("Error: incompatible type for variable " + id + "."); 
+		}
+	}		
 }
 
 prog	: 'programa' decl bloco  'fimprog.'
@@ -225,16 +230,20 @@ expr		:  termo (
 			
 termo		: ID { verificaID(_input.LT(-1).getText());
 	               _exprContent += _input.LT(-1).getText();
+	               IsiVariable var = (IsiVariable) symbolTable.get(_input.LT(-1).getText());
+	               compareType(_exprID, var.getType()); 
                  } 
             | 
               NUMBER
               {
               	_exprContent += _input.LT(-1).getText();
+              	compareType(_exprID, IsiVariable.NUMBER);
               }
              |
                TEXT
               {
-                _exprContent += _input.LT(-1).getText();	
+                _exprContent += _input.LT(-1).getText();
+                compareType(_exprID, IsiVariable.TEXT);
               }
 			;
 			

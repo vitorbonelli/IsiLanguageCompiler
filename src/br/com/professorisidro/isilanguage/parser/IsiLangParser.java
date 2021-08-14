@@ -146,7 +146,12 @@ public class IsiLangParser extends Parser {
 			}	
 		}
 		
-		
+		public void compareType(String id, int type){
+			IsiVariable var = (IsiVariable) symbolTable.get(id);
+			if (var.getType() != type) {
+		       	throw new IsiSemanticException("Error: incompatible type for variable " + id + "."); 
+			}
+		}		
 
 	public IsiLangParser(TokenStream input) {
 		super(input);
@@ -1078,6 +1083,8 @@ public class IsiLangParser extends Parser {
 				match(ID);
 				 verificaID(_input.LT(-1).getText());
 					               _exprContent += _input.LT(-1).getText();
+					               IsiVariable var = (IsiVariable) symbolTable.get(_input.LT(-1).getText());
+					               compareType(_exprID, var.getType()); 
 				                 
 				}
 				break;
@@ -1088,6 +1095,7 @@ public class IsiLangParser extends Parser {
 				match(NUMBER);
 
 				              	_exprContent += _input.LT(-1).getText();
+				              	compareType(_exprID, IsiVariable.NUMBER);
 				              
 				}
 				break;
@@ -1097,7 +1105,8 @@ public class IsiLangParser extends Parser {
 				setState(161);
 				match(TEXT);
 
-				                _exprContent += _input.LT(-1).getText();	
+				                _exprContent += _input.LT(-1).getText();
+				                compareType(_exprID, IsiVariable.TEXT);
 				              
 				}
 				break;

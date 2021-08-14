@@ -139,7 +139,12 @@ public class IsiLangLexer extends Lexer {
 			}	
 		}
 		
-		
+		public void compareType(String id, int type){
+			IsiVariable var = (IsiVariable) symbolTable.get(id);
+			if (var.getType() != type) {
+		       	throw new IsiSemanticException("Error: incompatible type for variable " + id + "."); 
+			}
+		}		
 
 
 	public IsiLangLexer(CharStream input) {
