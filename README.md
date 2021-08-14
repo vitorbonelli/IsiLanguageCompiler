@@ -16,3 +16,5 @@ IsiLanguage - Curso de Compiladores - UFABC
 ## Opcionais
 - Ignorar comentários de múltiplas linhas no arquivo ".isi"
 
+## Video
+- https://www.youtube.com/watch?v=mkT5u_yD5KY
