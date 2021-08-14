@@ -1,15 +1,19 @@
 programa
 
   numero a, b, c, d, e, f.
-  texto  t1.
+  texto  t1, t2.
 
   leia(a).
   leia(b).
   leia(t1).
   
+  /*comentário*/
+  
   a := 1 + 2 * 3 / b.
+  
+  t1 := "".
 
-  t1 := "oi".
+  t2 := "oi".
   
   escreva("oi").
 
