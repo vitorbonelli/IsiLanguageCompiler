@@ -116,7 +116,6 @@ declaravar :  tipo ID  {
            
 tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
            | 'texto'  { _tipo = IsiVariable.TEXT;  }
-           | 'booleano'  { _tipo = IsiVariable.BOOLEAN;  }
            ;
         
 bloco	: { curThread = new ArrayList<AbstractCommand>(); 
@@ -248,6 +247,7 @@ termo		: ID { verificaID(_input.LT(-1).getText());
                 _exprContent += _input.LT(-1).getText();
                 compareType(_exprID, IsiVariable.TEXT);
               }
+              
 			;
 			
 	
@@ -288,8 +288,6 @@ NUMBER	: [0-9]+ ('.' [0-9]+)?
 TEXT  :  AD (.)*? AD
 	  ;
 
-BOOLEAN  : 'true' | 'false'
-		 ;		
 
 WS	: (' ' | '\t' | '\n' | '\r') -> skip
     ;

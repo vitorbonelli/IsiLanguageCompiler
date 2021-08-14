@@ -1,21 +1,27 @@
 programa
 
   numero a, b, c, d, e, f.
+
   texto  t1, t2.
 
   leia(a).
   leia(b).
   leia(t1).
   
-  /*comentário*/
-  
+  /*comentário
+  linha
+  */
+   
+   
   a := 1 + 2 * 3 / b.
   
-  t1 := "".
+  d:= 3.14.
+  
 
   t2 := "oi".
   
   escreva("oi").
+
 
   se ( a > b ) entao {
      escreva (a).

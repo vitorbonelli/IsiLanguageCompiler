@@ -14,7 +14,7 @@ a= _key.nextDouble();
 b= _key.nextDouble();
 t1= _key.nextLine();
 a = 1+2*3/b;
-t1 = "";
+d = 3.14;
 t2 = "oi";
 System.out.println("oi");
 if (a>b) {
