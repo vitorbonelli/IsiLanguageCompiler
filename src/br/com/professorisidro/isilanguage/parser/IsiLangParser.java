@@ -33,15 +33,15 @@ public class IsiLangParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, AP=11, FP=12, SC=13, OP=14, ATTR=15, VIR=16, ACH=17, FCH=18, 
+		T__9=10, T__10=26, AP=11, FP=12, SC=13, OP=14, ATTR=15, VIR=16, ACH=17, FCH=18, 
 		OPREL=19, ID=20, NUMBER=21, TEXT=22, WS=23, AD=24, P=25;
 	public static final int
 		RULE_prog = 0, RULE_decl = 1, RULE_declaravar = 2, RULE_tipo = 3, RULE_bloco = 4, 
 		RULE_cmd = 5, RULE_cmdleitura = 6, RULE_cmdescrita = 7, RULE_cmdattrib = 8, 
-		RULE_cmdselecao = 9, RULE_cmdenquanto = 10, RULE_expr = 11, RULE_termo = 12;
+		RULE_cmdselecao = 9, RULE_cmdenquanto = 10, RULE_cmdrepeticao = 26, RULE_expr = 11, RULE_termo = 12;
 	public static final String[] ruleNames = {
 		"prog", "decl", "declaravar", "tipo", "bloco", "cmd", "cmdleitura", "cmdescrita", 
-		"cmdattrib", "cmdselecao", "cmdenquanto", "expr", "termo"
+		"cmdattrib", "cmdselecao", "cmdenquanto", "cmdrepeticao", "expr", "termo"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -113,9 +113,15 @@ public class IsiLangParser extends Parser {
 		private String _exprID;
 		private String _exprContent;
 		private String _exprDecision;
+		private String _exprEnquanto;
+		private ArrayList<AbstractCommand> listaCmd;
 		private ArrayList<AbstractCommand> listaTrue;
 		private ArrayList<AbstractCommand> listaFalse;
 		private ArrayList<AbstractCommand> listaWhile;
+		
+		public IsiSymbol symbolID(String id){
+			return symbolTable.get(id);
+		}
 		
 		public void verificaID(String id){
 			if (!symbolTable.exists(id)){
@@ -485,6 +491,10 @@ public class IsiLangParser extends Parser {
 		public CmdContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		public CmdrepeticaoContext cmdrepeticao() {
+			return getRuleContext(CmdrepeticaoContext.class,0);
+		}
+		
 		@Override public int getRuleIndex() { return RULE_cmd; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -536,6 +546,13 @@ public class IsiLangParser extends Parser {
 				{
 				setState(66);
 				cmdenquanto();
+				}
+				break;
+			case T__10:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(67);
+				cmdrepeticao();
 				}
 				break;
 			default:
@@ -982,6 +999,118 @@ public class IsiLangParser extends Parser {
 		return _localctx;
 	}
 
+	
+	public static class CmdrepeticaoContext extends ParserRuleContext {
+		public TerminalNode AP() { return getToken(IsiLangParser.AP, 0); }
+		public List<TerminalNode> ID() { return getTokens(IsiLangParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(IsiLangParser.ID, i);
+		}
+		public TerminalNode OPREL() { return getToken(IsiLangParser.OPREL, 0); }
+		public TerminalNode FP() { return getToken(IsiLangParser.FP, 0); }
+		public TerminalNode ACH() { return getToken(IsiLangParser.ACH, 0); }
+		public TerminalNode FCH() { return getToken(IsiLangParser.FCH, 0); }
+		public TerminalNode NUMBER() { return getToken(IsiLangParser.NUMBER, 0); }
+		public List<CmdContext> cmd() {
+			return getRuleContexts(CmdContext.class);
+		}
+		public CmdContext cmd(int i) {
+			return getRuleContext(CmdContext.class,i);
+		}
+		public CmdrepeticaoContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_cmdrepeticao; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof IsiLangListener ) ((IsiLangListener)listener).enterCmdrepeticao(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof IsiLangListener ) ((IsiLangListener)listener).exitCmdrepeticao(this);
+		}
+	}
+
+	public final CmdrepeticaoContext cmdrepeticao() throws RecognitionException {
+		CmdrepeticaoContext _localctx = new CmdrepeticaoContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_cmdrepeticao);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(148);
+			match(T__10);
+			setState(149);
+			match(AP);
+			setState(150);
+			match(ID);
+			 _exprEnquanto = _input.LT(-1).getText();
+												IsiSymbol symbol = symbolID(_exprEnquanto);
+						               			IsiVariable variable = (IsiVariable)symbol;
+						               			String x = variable.getValue();     
+			setState(152);
+			match(OPREL);
+			 _exprEnquanto += _input.LT(-1).getText(); 
+			setState(154);
+			_la = _input.LA(1);
+			if ( !(_la==ID || _la==NUMBER) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			 String var = _input.LT(-1).getText();
+			                   				  	_exprEnquanto += var;
+			                   				  	if(symbolTable.exists(var)){
+				                   					IsiSymbol symbolEnquanto = symbolID(var);
+					               					IsiVariable variableEnquanto = (IsiVariable)symbolEnquanto;
+					               					String y = variableEnquanto.getValue();
+					               				} 
+					               			
+			setState(156);
+			match(FP);
+			setState(157);
+			match(ACH);
+			 curThread = new ArrayList<AbstractCommand>(); 
+					                      stack.push(curThread);
+					                     
+			setState(160); 
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			do {
+				{
+				{
+				setState(159);
+				cmd();
+				}
+				}
+				setState(162); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__10) | (1L << ID) | (1L << NUMBER))) != 0) );
+			setState(164);
+			match(FCH);
+			listaCmd = stack.pop();
+					                   		 CommandEnquanto cmd = new CommandEnquanto(_exprEnquanto, listaCmd);
+					                   		 stack.peek().add(cmd);
+			                   			 
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	
+	
 	public static class ExprContext extends ParserRuleContext {
 		public List<TermoContext> termo() {
 			return getRuleContexts(TermoContext.class);

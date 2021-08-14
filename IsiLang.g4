@@ -111,6 +111,7 @@ declaravar :  tipo ID  {
            
 tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
            | 'texto'  { _tipo = IsiVariable.TEXT;  }
+           | 'booleano'  { _tipo = IsiVariable.BOOLEAN;  }
            ;
         
 bloco	: { curThread = new ArrayList<AbstractCommand>(); 
@@ -125,6 +126,7 @@ cmd		:  cmdleitura
  		|  cmdattrib
  		|  cmdselecao
  		|  cmdenquanto 
+ 		|  cmdrepeticao
 		;
 		
 cmdleitura	: 'leia' AP
@@ -217,6 +219,32 @@ cmdenquanto  : 'enquanto' AP
 						  }
 			;
 			
+cmdrepeticao	: 'enquanto' AP
+							 ID { _exprEnquanto = _input.LT(-1).getText();
+									IsiSymbol symbol = getSymbolByID(_exprEnquanto);
+			               			IsiVariable variable = (IsiVariable)symbol;
+			               			String x = variable.getValue();     }
+							 OPREL { _exprEnquanto += _input.LT(-1).getText(); }
+							 (ID | NUMBER) { String var = _input.LT(-1).getText();
+                   				  	_exprEnquanto += var;
+                   				  	if(symbolTable.exists(var)){
+	                   					IsiSymbol symbolEnquanto = getSymbolByID(var);
+		               					IsiVariable variableEnquanto = (IsiVariable)symbolEnquanto;
+		               					String y = variableEnquanto.getValue();
+		               				} 
+		               			}
+							 FP
+							 ACH
+							 { curThread = new ArrayList<AbstractCommand>(); 
+		                      stack.push(curThread);
+		                     }
+		                     (cmd)+ 
+							 FCH{listaCmd = stack.pop();
+		                   		 CommandEnquanto cmd = new CommandEnquanto(_exprEnquanto, listaCmd);
+		                   		 stack.peek().add(cmd);
+                   			 }
+                 ;
+			
 expr		:  termo ( 
 	             OP  { _exprContent += _input.LT(-1).getText();}
 	            termo
@@ -275,7 +303,10 @@ NUMBER	: [0-9]+ ('.' [0-9]+)?
 		
 TEXT  :  AD (.)*? AD
 	  ;
-		
+
+BOOLEAN  : 'true' | 'false'
+		 ;		
+
 WS	: (' ' | '\t' | '\n' | '\r') -> skip
     ;
 
