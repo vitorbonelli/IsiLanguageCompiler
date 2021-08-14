@@ -38,6 +38,12 @@ grammar IsiLang;
 		if (!symbolTable.exists(id)){
 			throw new IsiSemanticException("Symbol "+id+" not declared");
 		}
+		useVar(id);
+	}
+
+	public void useVar(String id) {
+		IsiVariable var = (IsiVariable) symbolTable.get(id);
+		var.setUsedVar(true);
 	}
 	
 	public void exibeComandos(){
@@ -49,11 +55,25 @@ grammar IsiLang;
 	public void generateCode(){
 		program.generateTarget();
 	}
+	
+	public void checkIfVarIsUsed(String id) {
+		IsiVariable var = (IsiVariable) symbolTable.get(id);
+		if (!var.isUsedVar()) {
+	       	System.out.println("Warning - Variable " + id + " was declared but not used."); 
+		}	
+	}
+	
+	
 }
 
 prog	: 'programa' decl bloco  'fimprog.'
            {  program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
+           	  
+           	  for (IsiSymbol symbol: symbolTable.getAll()) {
+				IsiVariable var = (IsiVariable) symbol; 
+           	  	checkIfVarIsUsed(var.getName());
+           	  }
            	 
            } 
 		;
@@ -123,9 +143,8 @@ cmdleitura	: 'leia' AP
 			
 cmdescrita	: 'escreva' 
                  AP 
-                 ID { verificaID(_input.LT(-1).getText());
-	                  _writeID = _input.LT(-1).getText();
-                     } 
+                 (ID { verificaID(_input.LT(-1).getText());}
+                 | TEXT) { _writeID = _input.LT(-1).getText(); } 
                  FP 
                  P
                {
@@ -152,6 +171,7 @@ cmdselecao  :  'se' AP
                     OPREL { _exprDecision += _input.LT(-1).getText(); }
                     (ID | NUMBER) {_exprDecision += _input.LT(-1).getText(); }
                     FP 
+                    'entao'
                     ACH 
                     { curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
@@ -211,6 +231,11 @@ termo		: ID { verificaID(_input.LT(-1).getText());
               {
               	_exprContent += _input.LT(-1).getText();
               }
+             |
+               TEXT
+              {
+                _exprContent += _input.LT(-1).getText();	
+              }
 			;
 			
 	
@@ -247,6 +272,9 @@ ID	: [a-z] ([a-z] | [A-Z] | [0-9])*
 	
 NUMBER	: [0-9]+ ('.' [0-9]+)?
 		;
+		
+TEXT  :  AD (.)*? AD
+	  ;
 		
 WS	: (' ' | '\t' | '\n' | '\r') -> skip
     ;

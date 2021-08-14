@@ -1,15 +1,19 @@
 programa
 
-  numero a, b, c.
+  numero a, b, c, d, e, f.
   texto  t1.
 
   leia(a).
   leia(b).
+  leia(t1).
   
   a := 1 + 2 * 3 / b.
 
+  t1 := "oi".
+  
+  escreva("oi").
 
-  se ( a > b ) {
+  se ( a > b ) entao {
      escreva (a).
   }
   senao {
